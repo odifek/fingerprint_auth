@@ -18,3 +18,10 @@ cd pyfprint
 
 sudo python3 setup.py install
 
+Run fingerprint_auth in the commandline
+
+`python3 enroll.py`
+
+`python3 authenticate.py`
+
+

@@ -26,17 +26,17 @@ def authenticate():
     print("To gain access, we have to verify you are authorized using the biometric system\n")
     with fdb:
         cur = fdb.cursor()
-        cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='biometrics'")
+        cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='biometric'")
         if not cur.fetchone():
             print("No data in database yet. Please enroll first")
             return
 
         cur.execute("SELECT username, finger_p FROM biometric")
         for row in cur.fetchall():
-            fp_str = row['finger_p'].decode('utf8', 'surrogateescape') # Decode binary data from db
+            fp_str = row[1].decode('utf8', 'surrogateescape') # Decode binary data from db
             data = pyfprint.pyf.fp_print_data_from_data(fp_str)
             gallery.append(pyfprint.Fprint(data_ptr=data))
-            users.append(row['username'])
+            users.append(row[0])
         print("To proceed, please swipe your RIGHT INDEX finger on the sensor...\n")
         n, fprint, img = dev.identify_finger(gallery)
         print("Verifying...")
