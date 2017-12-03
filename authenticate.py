@@ -69,4 +69,36 @@ def authenticate():
     pyfprint.fp_exit()
     return result
 
-authenticate() # Run the authentication function
+def authenticate_from_disk():
+    """
+    Authenticate single user from data stored in his home directory
+    :return: Boolean
+    """
+
+    # Initialize things
+    pyfprint.fp_init()
+    devs = pyfprint.discover_devices()
+    dev = devs[0]
+    dev.open()
+    fprint = dev.load_print_from_disk(pyfprint.Fingers['RIGHT_INDEX'])
+
+    print("Verifying...\nSwipe your finger across the sensor to proceed")
+    verified, img = dev.verify_finger(fprint)
+
+    if verified:
+        print("Authenticated!")
+    else:
+        print("Authentication failed")
+    if img is not None:
+        img.save_to_file('verify.pgm')
+        print("Wrote scanned image to verify.pgm")
+
+    # Closing formalities
+    dev.close()
+    pyfprint.fp_exit()
+
+
+# authenticate() # Run the authentication function for database authentication
+
+
+authenticate_from_disk() # Authenticate from disk. Uncomment to run this function.  ***Delete the trailing space also
